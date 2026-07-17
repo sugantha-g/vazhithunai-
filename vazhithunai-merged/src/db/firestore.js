@@ -10,7 +10,7 @@ import { readFileSync, existsSync } from "fs";
 
 const USE_REAL_FIREBASE =
   process.env.USE_REAL_FIREBASE === "true" &&
-  existsSync("./serviceAccountKey.json");
+  (existsSync("./serviceAccountKey.json") || existsSync("/etc/secrets/serviceAccountKey.json"));
 
 let db;
 
@@ -19,7 +19,7 @@ if (USE_REAL_FIREBASE) {
   const { getFirestore } = await import("firebase-admin/firestore");
 
   const serviceAccount = JSON.parse(
-    readFileSync("./serviceAccountKey.json", "utf-8")
+    readFileSync(existsSync("./serviceAccountKey.json") ? "./serviceAccountKey.json" : "/etc/secrets/serviceAccountKey.json", "utf-8")
   );
 
   initializeApp({ credential: cert(serviceAccount) });
