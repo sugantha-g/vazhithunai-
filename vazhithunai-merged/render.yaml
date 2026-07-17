@@ -1,6 +1,7 @@
 services:
   - type: web
     name: vazhithunai-backend
+    rootDir: vazhithunai-merged
     runtime: node
     plan: free
     buildCommand: npm install
