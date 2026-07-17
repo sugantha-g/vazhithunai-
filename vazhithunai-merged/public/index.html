@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Vazhithunai — Thunaiyaga Varava?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+Tamil:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ice:#B6D5D8;
+    --teal:#63868A;
+    --teal-dark:#4d6b6f;
+    --slate:#3D5466;
+    --charcoal:#293042;
+    --lavender:#C7C1CB;
+    --bg:#EEF5F5;
+    --surface:#FFFFFF;
+    --coral:#E4795A;
+    --verified:#3F8F6C;
+  }
+  *{box-sizing:border-box;}
+  html{ scroll-behavior:smooth; }
+  body{ margin:0; background:var(--bg); color:var(--charcoal); font-family:'Manrope',sans-serif; -webkit-font-smoothing:antialiased; }
+  .tamil{ font-family:'Baloo Tamma 2','Noto Sans Tamil',sans-serif; }
+  h1,h2,h3,.display{ font-family:'Baloo Tamma 2','Noto Sans Tamil',sans-serif; letter-spacing:-0.01em; }
+  a{ color:inherit; }
+  button{ font-family:inherit; cursor:pointer; }
+  ::selection{ background:var(--teal); color:#fff; }
+  .wrap{ max-width:1180px; margin:0 auto; padding:0 32px; }
+
+  /* ---------------- NAV (top, persistent) ---------------- */
+  .topnav{ position:fixed; top:0; left:0; right:0; z-index:60; background:var(--slate); }
+  .topnav-inner{ display:flex; align-items:center; justify-content:space-between; padding:14px 28px; max-width:1180px; margin:0 auto; }
+  .brand{ display:flex; align-items:center; gap:10px; color:#fff; }
+  .brand-word{ font-size:18px; font-weight:700; }
+  .brand-word .ta{ display:block; font-size:11px; font-weight:600; color:var(--ice); margin-top:-2px; }
+  .navlinks{ display:flex; gap:4px; }
+  .navlinks button{ background:none; border:none; color:#fff; opacity:0.72; font-size:13.5px; font-weight:600; padding:9px 15px; border-radius:100px; transition:.2s; }
+  .navlinks button:hover{ opacity:1; background:rgba(255,255,255,0.08); }
+  .navlinks button.active{ opacity:1; background:var(--ice); color:var(--charcoal); }
+  @media (max-width:760px){ .navlinks{ display:none; } }
+
+  /* ---------------- SECTION DOT NAV (fullpage) ---------------- */
+  .dotnav{ position:fixed; right:26px; top:50%; transform:translateY(-50%); z-index:55; display:flex; flex-direction:column; gap:16px; }
+  .dotnav button{ background:none; border:none; display:flex; align-items:center; gap:10px; }
+  .dotnav .dot{ width:9px; height:9px; border-radius:50%; border:1.5px solid var(--slate); background:transparent; transition:.25s; }
+  .dotnav .lbl{ font-size:10.5px; font-weight:700; color:var(--slate); opacity:0; transform:translateX(6px); transition:.2s; white-space:nowrap; }
+  .dotnav button:hover .lbl{ opacity:0.7; transform:translateX(0); }
+  .dotnav button.active .dot{ background:var(--teal); border-color:var(--teal); transform:scale(1.3); }
+  .dotnav button.active .lbl{ opacity:1; color:var(--charcoal); transform:translateX(0); }
+  @media (max-width:760px){ .dotnav{ display:none; } }
+
+  /* ---------------- NORMAL SCROLLING SECTIONS ---------------- */
+  .fp-section{ min-height:80vh; display:flex; flex-direction:column; justify-content:center; padding:88px 0 72px; position:relative; scroll-margin-top:74px; border-bottom:1px solid var(--lavender); }
+  .fp-section:last-child{ border-bottom:none; }
+
+  /* ---------------- HERO ---------------- */
+  #s-hero{ background:radial-gradient(circle at 80% 20%, rgba(182,213,216,0.9), var(--bg) 60%); }
+  .eyebrow{ display:inline-flex; align-items:center; gap:8px; font-size:12.5px; font-weight:700; color:var(--teal-dark); background:rgba(99,134,138,0.12); border:1px solid rgba(99,134,138,0.35); padding:6px 14px; border-radius:100px; margin-bottom:24px; }
+  .eyebrow .dot2{ width:6px; height:6px; border-radius:50%; background:var(--verified); }
+  .tagline-lang{ display:block; font-size:13px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:var(--teal); margin-bottom:8px; }
+  .tagline{ font-size:clamp(30px,5.6vw,58px); font-weight:700; line-height:1.14; margin:0; min-height:1.2em; opacity:0; transform:translateY(12px); transition:opacity .5s ease, transform .5s ease; }
+  .tagline.show{ opacity:1; transform:translateY(0); }
+  .tagline .accent{ color:var(--coral); }
+  .hero-sub{ max-width:560px; font-size:16.5px; line-height:1.65; color:var(--slate); margin:22px 0 32px; }
+  .hero-ctas{ display:flex; gap:14px; flex-wrap:wrap; }
+  .btn{ border:none; border-radius:12px; padding:15px 26px; font-weight:700; font-size:14.5px; display:inline-flex; align-items:center; gap:9px; transition:.15s; }
+  .btn:active{ transform:scale(0.97); }
+  .btn-primary{ background:var(--teal); color:#fff; box-shadow:0 10px 24px -10px rgba(99,134,138,0.6); }
+  .btn-primary:hover{ background:var(--teal-dark); }
+  .btn-ghost{ background:#fff; color:var(--charcoal); border:1px solid var(--lavender); }
+  .btn-ghost:hover{ background:var(--ice); }
+  .btn-coral{ background:var(--coral); color:#fff; }
+  .btn-outline{ background:transparent; border:1.5px solid var(--slate); color:var(--slate); }
+  .btn-block{ width:100%; justify-content:center; }
+  .btn[disabled]{ opacity:0.4; cursor:not-allowed; }
+
+  .stat-strip{ display:flex; flex-wrap:wrap; gap:30px; margin-top:50px; padding-top:24px; border-top:1px solid var(--lavender); }
+  .stat-strip .item .n{ font-family:'Baloo Tamma 2',sans-serif; font-size:22px; font-weight:800; color:var(--slate); }
+  .stat-strip .item .l{ font-size:12px; color:var(--teal-dark); font-weight:600; margin-top:2px; }
+
+  /* ---------------- SECTION SHELL ---------------- */
+  .kicker{ font-size:12px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:var(--teal); margin-bottom:12px; }
+  .section-title{ font-size:clamp(24px,3.2vw,36px); font-weight:700; margin:0 0 14px; color:var(--charcoal); }
+  .section-body{ color:var(--slate); font-size:15px; line-height:1.7; max-width:620px; }
+
+  /* ---------------- PROBLEM ---------------- */
+  #s-problem{ background:var(--surface); }
+  .problem-grid{ display:grid; grid-template-columns:1.1fr 0.9fr; gap:48px; align-items:start; }
+  @media (max-width:900px){ .problem-grid{ grid-template-columns:1fr; } }
+  .pain-list{ list-style:none; margin:24px 0 0; padding:0; display:flex; flex-direction:column; gap:14px; }
+  .pain-list li{ background:var(--bg); border:1px solid var(--lavender); border-radius:12px; padding:14px 16px; font-size:13.8px; color:var(--charcoal); display:flex; gap:10px; align-items:flex-start; }
+  .pain-list li svg{ flex-shrink:0; margin-top:2px; color:var(--coral); }
+  .callout{ background:var(--charcoal); color:var(--ice); border-radius:18px; padding:26px; font-size:14px; line-height:1.7; }
+  .callout b{ color:#fff; }
+
+  /* ---------------- MATCHING ---------------- */
+  #s-matching{ background:var(--bg); }
+  .flow{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-top:36px; }
+  @media (max-width:900px){ .flow{ grid-template-columns:1fr 1fr; } }
+  .flow-card{ background:var(--surface); border:1px solid var(--lavender); border-radius:16px; padding:20px; }
+  .flow-card .n{ font-family:'Baloo Tamma 2',sans-serif; color:var(--coral); font-weight:800; font-size:13px; margin-bottom:10px; display:block; }
+  .flow-card h4{ margin:0 0 6px; font-size:14.5px; }
+  .flow-card p{ margin:0; font-size:12.8px; color:var(--slate); line-height:1.55; }
+  .tag-pill{ display:inline-block; margin-top:10px; font-size:10.5px; font-weight:700; background:var(--ice); color:var(--teal-dark); padding:4px 10px; border-radius:100px; }
+
+  /* ---------------- FARE ---------------- */
+  #s-fare{ background:var(--surface); }
+  .fare-grid{ display:grid; grid-template-columns:0.9fr 1.1fr; gap:48px; align-items:center; }
+  @media (max-width:900px){ .fare-grid{ grid-template-columns:1fr; } }
+  .formula-card{ background:var(--slate); color:#fff; border-radius:20px; padding:30px; }
+  .formula-card .kicker{ color:var(--ice); }
+  .formula{ font-family:'Baloo Tamma 2',sans-serif; font-size:19px; font-weight:700; line-height:1.6; margin:14px 0; }
+  .formula span{ color:var(--ice); }
+  .fare-note{ font-size:13px; color:rgba(255,255,255,0.75); line-height:1.6; }
+  .fare-points{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:16px; }
+  .fare-points li{ display:flex; gap:12px; font-size:14px; color:var(--charcoal); line-height:1.55; }
+  .fare-points .ic{ width:30px; height:30px; border-radius:9px; background:var(--ice); color:var(--teal-dark); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+
+  /* ---------------- SAFETY (clickable features) ---------------- */
+  #s-safety{ background:var(--bg); }
+  .feat-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:36px; }
+  @media (max-width:900px){ .feat-grid{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:560px){ .feat-grid{ grid-template-columns:1fr; } }
+  .feat-card{ background:var(--surface); border:1px solid var(--lavender); border-radius:16px; padding:20px; text-align:left; transition:.18s; }
+  .feat-card:hover{ border-color:var(--teal); transform:translateY(-2px); box-shadow:0 12px 26px -14px rgba(41,48,66,0.25); }
+  .feat-card .ic{ width:36px; height:36px; border-radius:10px; background:var(--ice); color:var(--teal-dark); display:flex; align-items:center; justify-content:center; margin-bottom:12px; }
+  .feat-card h4{ margin:0 0 6px; font-size:14px; }
+  .feat-card p{ margin:0; font-size:12.5px; color:var(--slate); line-height:1.5; }
+  .feat-card .more{ font-size:11.5px; font-weight:700; color:var(--coral); margin-top:10px; display:inline-block; }
+
+  /* ---------------- MODAL ---------------- */
+  .modal-backdrop{ position:fixed; inset:0; background:rgba(41,48,66,0.55); z-index:200; display:none; align-items:center; justify-content:center; padding:24px; }
+  .modal-backdrop.show{ display:flex; }
+  .modal{ background:#fff; border-radius:20px; max-width:460px; width:100%; padding:30px; position:relative; }
+  .modal .ic{ width:46px; height:46px; border-radius:13px; background:var(--ice); color:var(--teal-dark); display:flex; align-items:center; justify-content:center; margin-bottom:16px; }
+  .modal h3{ margin:0 0 10px; font-size:19px; }
+  .modal p{ margin:0; font-size:14px; color:var(--slate); line-height:1.65; }
+  .modal-close{ position:absolute; top:18px; right:18px; background:var(--bg); border:none; width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--charcoal); }
+
+  /* ---------------- REWARDS ---------------- */
+  #s-rewards{ background:var(--surface); }
+  .stat-row{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-top:34px; }
+  @media (max-width:860px){ .stat-row{ grid-template-columns:1fr 1fr; } }
+  .stat{ padding:20px 18px; border:1px solid var(--lavender); border-radius:14px; background:var(--bg); }
+  .stat .n{ font-size:clamp(24px,3.2vw,32px); font-weight:800; color:var(--teal-dark); font-family:'Baloo Tamma 2',sans-serif; }
+  .stat .l{ font-size:11.8px; color:var(--slate); margin-top:6px; font-weight:600; }
+
+  /* ---------------- CTA / FOOTER SECTION ---------------- */
+  #s-cta{ background:var(--charcoal); color:#fff; }
+  #s-cta .section-title{ color:#fff; }
+  #s-cta .kicker{ color:var(--ice); }
+  #s-cta .section-body{ color:var(--lavender); }
+  .cta-ctas{ display:flex; gap:14px; flex-wrap:wrap; margin-top:26px; }
+  .foot-mini{ margin-top:64px; padding-top:24px; border-top:1px solid rgba(255,255,255,0.14); display:flex; justify-content:space-between; flex-wrap:wrap; gap:14px; font-size:12.5px; color:var(--lavender); }
+  .foot-mini a{ text-decoration:none; margin-right:18px; }
+  .foot-mini a:hover{ color:#fff; }
+
+  /* ---------------- VIEW SWITCH (book/drive pages, not fullpage) ---------------- */
+  .view{ display:none; }
+  .view.active{ display:block; }
+  #view-book, #view-drive{ padding-top:70px; min-height:100vh; }
+
+  .page-head{ padding:44px 32px 10px; max-width:1180px; margin:0 auto; }
+  .page-head h2{ font-size:clamp(24px,4vw,32px); margin:0 0 8px; color:var(--charcoal); }
+  .page-head p{ color:var(--slate); max-width:520px; font-size:14.5px; line-height:1.6; }
+
+  .gate{ max-width:480px; margin:20px auto 90px; padding:0 32px; }
+  .gate-card{ background:#fff; border:1px solid var(--lavender); border-radius:20px; padding:30px; text-align:center; }
+  .gate-icon{ width:54px; height:54px; border-radius:15px; background:var(--ice); display:flex; align-items:center; justify-content:center; margin:0 auto 16px; color:var(--teal-dark); }
+  .gate-card h3{ margin:0 0 10px; font-size:18px; }
+  .gate-card p{ margin:0 0 20px; font-size:13.5px; color:var(--slate); line-height:1.6; }
+  .id-choice{ display:flex; gap:10px; margin-bottom:16px; }
+  .id-choice label{ flex:1; border:1px solid var(--lavender); border-radius:10px; padding:11px; font-size:12px; font-weight:700; text-align:center; cursor:pointer; }
+  .id-choice input{ display:none; }
+  .id-choice label:has(input:checked){ background:var(--teal); border-color:var(--teal); color:#fff; }
+  .upload-box{ border:1.5px dashed var(--lavender); border-radius:12px; padding:24px 16px; font-size:12.5px; color:var(--slate); margin-bottom:18px; background:var(--bg); }
+  .progress-wrap{ display:none; margin:16px 0; }
+  .progress-wrap.active{ display:block; }
+  .progress-track{ height:6px; background:var(--lavender); border-radius:100px; overflow:hidden; }
+  .progress-fill{ height:100%; width:0%; background:var(--teal); border-radius:100px; transition:width 1.6s ease; }
+  .progress-label{ font-size:12px; color:var(--slate); margin-top:8px; }
+  .badge{ display:inline-flex; align-items:center; gap:6px; font-size:11.5px; font-weight:700; padding:5px 11px; border-radius:100px; }
+  .badge-verified{ background:rgba(63,143,108,0.14); color:var(--verified); border:1px solid rgba(63,143,108,0.4); }
+
+  .booking-shell{ max-width:620px; margin:0 auto 40px; padding:0 32px; }
+  .verified-strip{ display:flex; align-items:center; justify-content:space-between; background:#fff; border:1px solid var(--lavender); border-radius:14px; padding:13px 17px; margin-bottom:16px; gap:10px; }
+  .verified-strip .who{ display:flex; align-items:center; gap:10px; font-size:13px; font-weight:700; min-width:0; }
+  .verified-strip .who-text{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .avatar{ width:30px; height:30px; border-radius:50%; background:var(--teal); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:12.5px; flex-shrink:0; }
+  .strip-right{ display:flex; align-items:center; gap:8px; flex-shrink:0; }
+  .connections-btn{ display:flex; align-items:center; gap:5px; background:var(--bg); border:1px solid var(--lavender); border-radius:100px; padding:6px 11px 6px 8px; font-size:11.5px; font-weight:700; color:var(--slate); }
+  .connections-btn .avatars{ display:flex; }
+  .connections-btn .avatars span{ width:16px; height:16px; border-radius:50%; background:var(--teal-dark); border:1.5px solid #fff; margin-left:-6px; }
+  .connections-btn .avatars span:first-child{ margin-left:0; }
+
+  /* ---------------- STEP TABS (app-style flow, no stacked scroll) ---------------- */
+  .step-tabs{ display:flex; gap:6px; background:var(--surface); border:1px solid var(--lavender); border-radius:12px; padding:5px; margin-bottom:16px; }
+  .step-tab{ flex:1; border:none; background:none; padding:10px 6px; border-radius:9px; font-size:12.5px; font-weight:700; color:var(--slate); display:flex; align-items:center; justify-content:center; gap:6px; transition:.15s; }
+  .step-tab .num{ width:18px; height:18px; border-radius:50%; background:var(--lavender); color:#fff; font-size:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .step-tab.active{ background:var(--teal); color:#fff; }
+  .step-tab.active .num{ background:rgba(255,255,255,0.3); }
+  .step-tab.done .num{ background:var(--verified); }
+  .step-tab[disabled]{ opacity:0.45; cursor:not-allowed; }
+  .step-panel{ display:none; }
+  .step-panel.active{ display:block; animation:fadeUp .3s ease; }
+  @keyframes fadeUp{ from{ opacity:0; transform:translateY(6px); } to{ opacity:1; transform:translateY(0); } }
+
+  /* ---------------- CONNECTIONS PANEL ---------------- */
+  .conn-row{ display:flex; align-items:center; justify-content:space-between; padding:11px 0; border-bottom:1px solid var(--lavender); }
+  .conn-row:last-child{ border-bottom:none; }
+  .conn-l{ display:flex; align-items:center; gap:11px; }
+  .conn-name{ font-size:13px; font-weight:700; }
+  .conn-meta{ font-size:11px; color:var(--slate); margin-top:1px; }
+  .conn-badge{ font-size:10.5px; font-weight:700; color:var(--teal-dark); background:var(--ice); padding:3px 9px; border-radius:100px; }
+
+  .card{ background:#fff; border:1px solid var(--lavender); border-radius:16px; padding:22px; margin-bottom:16px; }
+  .card h4{ margin:0 0 14px; font-size:14.5px; }
+  .field{ margin-bottom:15px; }
+  .field label{ display:block; font-size:12px; font-weight:700; color:var(--slate); margin-bottom:7px; }
+  .field select, .field input[type=text]{ width:100%; background:var(--bg); border:1px solid var(--lavender); color:var(--charcoal); border-radius:10px; padding:11px 13px; font-size:14px; font-family:inherit; }
+  .field-with-icon{ position:relative; }
+  .field-with-icon input{ padding-right:42px !important; }
+  .mic-btn{ position:absolute; right:7px; top:50%; transform:translateY(-50%); background:var(--teal); border:none; width:28px; height:28px; border-radius:8px; display:flex; align-items:center; justify-content:center; color:#fff; }
+  .tiers{ display:flex; gap:8px; }
+  .tier{ flex:1; text-align:center; padding:9px; border-radius:10px; border:1px solid var(--lavender); font-size:12px; font-weight:700; cursor:pointer; color:var(--slate); }
+  .tier.active{ background:var(--teal); color:#fff; border-color:var(--teal); }
+  .fare-preview{ display:flex; align-items:center; justify-content:space-between; background:var(--bg); border-radius:10px; padding:12px 14px; font-size:13px; color:var(--slate); margin-top:4px; }
+  .fare-preview b{ color:var(--charcoal); font-size:16px; }
+  .eta-guarantee{ display:flex; align-items:center; gap:9px; font-size:12px; color:var(--teal-dark); font-weight:700; margin-top:10px; }
+
+  .driver-row{ display:flex; align-items:center; justify-content:space-between; padding:13px 0; border-bottom:1px solid var(--lavender); }
+  .driver-row:last-child{ border-bottom:none; }
+  .driver-l{ display:flex; align-items:center; gap:11px; }
+  .driver-name{ font-size:13.5px; font-weight:700; }
+  .driver-meta{ font-size:11.5px; color:var(--slate); margin-top:2px; }
+  .fare-tag{ font-size:13.5px; font-weight:800; color:var(--teal-dark); }
+
+  .safety-row{ display:flex; gap:10px; margin-top:4px; flex-wrap:wrap; }
+  .safety-btn{ flex:1; min-width:96px; border-radius:12px; padding:15px 8px; text-align:center; border:1px solid var(--lavender); background:var(--bg); }
+  .safety-btn .lbl{ font-size:11px; font-weight:700; margin-top:7px; display:block; color:var(--charcoal); }
+  .safety-btn.sos{ border-color:rgba(228,121,90,0.5); }
+  .safety-btn.sos .ic{ color:var(--coral); }
+  .safety-btn.buddy .ic{ color:var(--teal-dark); }
+  .pulse{ animation:pulse 1.4s infinite; }
+  @keyframes pulse{ 0%{ box-shadow:0 0 0 0 rgba(228,121,90,0.4);} 70%{ box-shadow:0 0 0 14px rgba(228,121,90,0);} 100%{ box-shadow:0 0 0 0 rgba(228,121,90,0);} }
+
+  .toast{ position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--charcoal); color:#fff; padding:13px 22px; border-radius:100px; font-size:13px; font-weight:700; opacity:0; pointer-events:none; transition:.3s; z-index:300; box-shadow:0 12px 30px rgba(0,0,0,0.25); }
+  .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+  .hidden{ display:none !important; }
+  @media (prefers-reduced-motion: reduce){ *{ animation:none !important; transition:none !important; } }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="topnav-inner">
+    <div class="brand">
+      <svg width="30" height="30" viewBox="0 0 34 34" fill="none">
+        <rect width="34" height="34" rx="9" fill="#B6D5D8"/>
+        <path d="M8 22h18l-1.6-6.4a2 2 0 0 0-1.94-1.6H11.5a2 2 0 0 0-1.94 1.6L8 22Z" stroke="#293042" stroke-width="1.6" stroke-linejoin="round"/>
+        <circle cx="12.5" cy="24" r="1.8" fill="#293042"/>
+        <circle cx="23.5" cy="24" r="1.8" fill="#293042"/>
+      </svg>
+      <div class="brand-word">Vazhithunai<span class="ta">வழித்துணை</span></div>
+    </div>
+    <div class="navlinks">
+      <button data-view="home" class="active" onclick="setView('home')">Home</button>
+      <button data-view="book" onclick="setView('book')">Book a ride</button>
+      <button data-view="drive" onclick="setView('drive')">Drive with us</button>
+    </div>
+    <button class="btn btn-primary" style="padding:9px 18px;font-size:12.5px;" onclick="setView('book')">Get started</button>
+  </div>
+</nav>
+
+<!-- ============ HOME (fullpage swipe) ============ -->
+<div class="view active" id="view-home">
+
+  <div class="dotnav" id="dotnav">
+    <button data-target="s-hero" class="active" onclick="goSection('s-hero')"><span class="dot"></span><span class="lbl">Home</span></button>
+    <button data-target="s-problem" onclick="goSection('s-problem')"><span class="dot"></span><span class="lbl">The Gap</span></button>
+    <button data-target="s-matching" onclick="goSection('s-matching')"><span class="dot"></span><span class="lbl">Matching</span></button>
+    <button data-target="s-fare" onclick="goSection('s-fare')"><span class="dot"></span><span class="lbl">Fair Fare</span></button>
+    <button data-target="s-safety" onclick="goSection('s-safety')"><span class="dot"></span><span class="lbl">Safety</span></button>
+    <button data-target="s-rewards" onclick="goSection('s-rewards')"><span class="dot"></span><span class="lbl">Rewards</span></button>
+    <button data-target="s-cta" onclick="goSection('s-cta')"><span class="dot"></span><span class="lbl">Start</span></button>
+  </div>
+
+    <!-- 01 HERO -->
+    <section class="fp-section" id="s-hero">
+      <div class="wrap">
+        <span class="eyebrow"><span class="dot2"></span> Direction-based matching, priced by government tariff</span>
+        <span class="tagline-lang" id="taglineLang">Tamil</span>
+        <h1 class="tagline show" id="taglineText">Thunaiyaga <span class="accent">varava?</span></h1>
+        <p class="hero-sub">Vazhithunai matches you with people heading the same way, splits the fare fairly by actual distance and the official tariff, and locks it in before you even get in.</p>
+        <div class="hero-ctas">
+          <button class="btn btn-primary" onclick="setView('book')">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Book a ride
+          </button>
+          <button class="btn btn-ghost" onclick="setView('drive')">Become a verified driver</button>
+        </div>
+        <div class="stat-strip">
+          <div class="item"><div class="n">6,000+</div><div class="l">Daily rides on the open network we dispatch through</div></div>
+          <div class="item"><div class="n">₹/km</div><div class="l">Priced at official tariff, never driver discretion</div></div>
+          <div class="item"><div class="n">3</div><div class="l">Trusted contacts alerted on every SOS</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 THE GAP -->
+    <section class="fp-section" id="s-problem">
+      <div class="wrap problem-grid">
+        <div>
+          <div class="kicker">The problem</div>
+          <h2 class="section-title">Chennai Metro has admitted it: there's no real last-mile policy</h2>
+          <p class="section-body">Feeder buses and shuttles get added "based on demand and feasibility" — station by station, after commuters have usually already given up. Share autos fill the gap informally, but informally means unreliable.</p>
+          <ul class="pain-list">
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 8v5M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/></svg> Drivers decide, trip by trip, whether to stop for you at all.</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 8v5M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/></svg> Fares are negotiated on the spot — no meter, no standard rate.</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 8v5M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/></svg> A shared fare today just means total ÷ headcount — the person going 500m subsidises the one going 3km.</li>
+          </ul>
+        </div>
+        <div class="callout">
+          <div class="kicker" style="color:var(--ice);">Why not just use Ola, Uber, or Namma Yatri?</div>
+          <p><b>Namma Yatri / Beckn</b> fix driver-side discovery, not multi-rider matching or fair splitting.<br><br><b>Ola / Uber</b> run closed dispatch built for single riders, not matched groups.<br><br>Vazhithunai adds the missing layer — <b>direction-based matching and fair fare-splitting</b> — on top of the open network these already run on.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 MATCHING -->
+    <section class="fp-section" id="s-matching">
+      <div class="wrap">
+        <div class="kicker">How matching works</div>
+        <h2 class="section-title">Pickup anywhere — priority near a metro or bus stop</h2>
+        <p class="section-body">Vazhithunai groups riders within a ~150–200m live radius who are heading the same bearing, then hands the confirmed group to a nearby Beckn-network driver — no new app for the driver to install.</p>
+        <div class="flow">
+          <div class="flow-card"><span class="n">01</span><h4>Live GPS pickup</h4><p>Works from any location, not just official stops.</p></div>
+          <div class="flow-card"><span class="n">02</span><h4>Direction grouping</h4><p>Riders heading the same bearing within ~150–200m get matched automatically.<span class="tag-pill">Metro-feeder tag near stops</span></p></div>
+          <div class="flow-card"><span class="n">03</span><h4>Vehicle-aware capacity</h4><p>Auto groups cap at 4; cab groups scale to 6–7 by vehicle class.</p></div>
+          <div class="flow-card"><span class="n">04</span><h4>Beckn dispatch handoff</h4><p>The confirmed group is sent as one request — any nearby Beckn driver can accept.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 FARE -->
+    <section class="fp-section" id="s-fare">
+      <div class="wrap fare-grid">
+        <div class="formula-card">
+          <div class="kicker">No driver discretion, ever</div>
+          <div class="formula">Fare = base fare<br>+ (distance <span>×</span> official tariff)</div>
+          <p class="fare-note">The same government-mandated per-km rate auto meters are supposed to run on — locked in at match time using a live traffic-aware estimate, so no one faces a surprise mid-ride.</p>
+        </div>
+        <div>
+          <div class="kicker">Fair, by design</div>
+          <h2 class="section-title">You pay for your distance, not your headcount</h2>
+          <ul class="fare-points">
+            <li><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h10M4 17h13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span> Proportional split by actual drop distance — 500m and 3km are never priced the same.</li>
+            <li><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 8v4l3 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></span> Locked at match time, not renegotiated in traffic.</li>
+            <li><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 2v20M17 6H9.5a3 3 0 0 0 0 6h5a3 3 0 0 1 0 6H6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></span> UPI-first, cash fully supported — your exact share is shown before you ride.</li>
+            <li><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M3 12h4l2-7 4 14 2-7h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></span> Detour surcharge, calculated the same way, paid straight to the driver.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05 SAFETY (clickable) -->
+    <section class="fp-section" id="s-safety">
+      <div class="wrap">
+        <div class="kicker">Safety &amp; trust — tap any card</div>
+        <h2 class="section-title">Every safeguard is on by default, not a setting you find later</h2>
+        <p class="section-body">Riders and drivers both verify ID before their first match. Tap a feature to see exactly what it does.</p>
+        <div class="feat-grid" id="featGrid"></div>
+      </div>
+    </section>
+
+    <!-- 06 REWARDS -->
+    <section class="fp-section" id="s-rewards">
+      <div class="wrap">
+        <div class="kicker">Rewards &amp; the civic layer</div>
+        <h2 class="section-title">Every shared seat counts toward something bigger</h2>
+        <p class="section-body">Sharing instead of riding solo earns riders CO2-linked coupons and drivers a shot at Driver of the Week — and in aggregate, it builds the demand map Chennai's own transit planners say they don't have.</p>
+        <div class="stat-row">
+          <div class="stat"><div class="n">4.2t</div><div class="l">CO2 saved this month across matched rides</div></div>
+          <div class="stat"><div class="n">18,600</div><div class="l">Shared trips matched instead of solo autos</div></div>
+          <div class="stat"><div class="n">96%</div><div class="l">Positive rating threshold, last 20 rides</div></div>
+          <div class="stat"><div class="n">0%</div><div class="l">Commission — Beckn network is commission-free</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 07 CTA -->
+    <section class="fp-section" id="s-cta">
+      <div class="wrap">
+        <div class="kicker">Booking opens only after verification</div>
+        <h2 class="section-title">A rider can't book — a driver can't be matched — until ID is verified. No exceptions, either side.</h2>
+        <p class="section-body">It's the one rule we don't bend. Upload a government or corporate ID, get OCR-checked in under a minute, and you're in.</p>
+        <div class="cta-ctas">
+          <button class="btn btn-primary" onclick="setView('book')">Book a ride</button>
+          <button class="btn btn-outline" onclick="setView('drive')">Become a verified driver</button>
+        </div>
+        <div class="foot-mini">
+          <div><a href="#" onclick="return false;">Grievance tracker</a><a href="#" onclick="return false;">Driver terms</a><a href="#" onclick="return false;">Beckn network</a></div>
+          <div>Prototype build for Vazhithunai · Chennai, 2026</div>
+        </div>
+      </div>
+    </section>
+
+</div>
+
+<!-- ============ BOOK VIEW ============ -->
+<div class="view" id="view-book">
+  <div class="page-head">
+    <div class="kicker">Book a ride</div>
+    <h2>Get matched by direction, priced by distance</h2>
+    <p>Only riders and drivers with a cleared Trust Badge can be matched on Vazhithunai.</p>
+  </div>
+
+  <div class="gate" id="riderGate">
+    <div class="gate-card">
+      <div class="gate-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v6c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6l7-3Z" stroke="currentColor" stroke-width="1.8"/><path d="M9.5 12.5l1.8 1.8 3.5-3.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <h3>Verify your ID to book</h3>
+      <p>Your Trust Badge is shown to every match so they know exactly who's sharing the ride. OCR-checked in under a minute.</p>
+      <div class="id-choice">
+        <label><input type="radio" name="riderIdType" value="student" checked><span>Government ID</span></label>
+        <label><input type="radio" name="riderIdType" value="employer"><span>Corporate ID</span></label>
+      </div>
+      <div class="upload-box">📎 Tap to upload a photo of your ID<br><span style="opacity:.65;">(simulated for this prototype)</span></div>
+      <div class="progress-wrap" id="riderProgress">
+        <div class="progress-track"><div class="progress-fill" id="riderProgressFill"></div></div>
+        <div class="progress-label" id="riderProgressLabel">Reading your ID…</div>
+      </div>
+      <button class="btn btn-primary btn-block" onclick="runVerification('rider')">Verify and unlock booking</button>
+    </div>
+  </div>
+
+  <div class="booking-shell hidden" id="riderBooking">
+    <div class="verified-strip">
+      <div class="who"><div class="avatar">A</div> <span class="who-text" id="riderBadgeName">142 rides · 96% positive</span></div>
+      <div class="strip-right">
+        <button class="connections-btn" onclick="openConnections()">
+          <span class="avatars"><span></span><span></span><span></span></span>
+          <span id="connCountLabel">38 connections</span>
+        </button>
+        <span class="badge badge-verified"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M9.5 12.5l1.8 1.8 3.5-3.8" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg> Verified</span>
+      </div>
+    </div>
+
+    <!-- step tabs: keeps the whole booking flow to one screen instead of stacked scrolling cards -->
+    <div class="step-tabs">
+      <button class="step-tab active" id="tabBtn-where" onclick="goStep('where')"><span class="num">1</span> Where to</button>
+      <button class="step-tab" id="tabBtn-matches" onclick="goStep('matches')" disabled><span class="num">2</span> Nearby mates</button>
+      <button class="step-tab" id="tabBtn-ride" onclick="goStep('ride')" disabled><span class="num">3</span> Your ride</button>
+    </div>
+
+    <div class="step-panel active" id="panel-where">
+      <div class="card">
+        <h4>Where are you headed?</h4>
+        <div class="field">
+          <label>Pickup — live GPS location</label>
+          <select id="pickupSelect">
+            <option value="guindy">Near Guindy Metro (feeder match)</option>
+            <option value="tidel">Near Tidel Park (feeder match)</option>
+            <option value="custom">Custom location</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Destination</label>
+          <div class="field-with-icon">
+            <input type="text" placeholder="Type your destination" id="destInput">
+            <button class="mic-btn" onclick="voiceFill()" title="Voice entry (roadmap)">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z" stroke="currentColor" stroke-width="1.8"/><path d="M6 11a6 6 0 0 0 12 0M12 19v2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="field">
+          <label>Live traffic</label>
+          <div class="tiers">
+            <div class="tier" onclick="setTier(this)">Smooth</div>
+            <div class="tier active" onclick="setTier(this)">Moderate</div>
+            <div class="tier" onclick="setTier(this)">Heavy</div>
+          </div>
+        </div>
+        <div class="fare-preview">Estimated share — locked once matched <b id="estFare">~₹27</b></div>
+        <div class="eta-guarantee">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 8v4l3 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          Fare locked with traffic-aware ETA — no mid-ride surprises
+        </div>
+        <button class="btn btn-primary btn-block" style="margin-top:16px;" onclick="findMatches()">Find nearby mates</button>
+      </div>
+    </div>
+
+    <div class="step-panel" id="panel-matches">
+      <div class="card">
+        <h4 id="matchGroupTitle">Group forming near Guindy Metro</h4>
+        <div class="driver-row">
+          <div class="driver-l"><div class="avatar" style="background:var(--teal-dark);" id="matchDriverInitial">M</div>
+            <div><div class="driver-name" id="matchDriverName">Murugan R. <span class="badge badge-verified" style="padding:2px 8px;">Verified</span></div><div class="driver-meta" id="matchDriverMeta">Dispatched via Beckn</div></div>
+          </div>
+          <div class="fare-tag" id="matchFareTag">₹—</div>
+        </div>
+        <p style="font-size:11.5px;color:var(--slate);margin:10px 0 0;" id="matchGroupNote">You're the only one in this group so far — more riders heading the same way will join automatically as they request nearby.</p>
+        <button class="btn btn-ghost btn-block" style="margin-top:14px;" onclick="goStep('where')">← Change destination</button>
+        <button class="btn btn-primary btn-block" style="margin-top:10px;" onclick="startRide()">Confirm ride</button>
+      </div>
+    </div>
+
+    <div class="step-panel" id="panel-ride">
+      <div class="card">
+        <h4>Ride in progress — Safety Buddy is watching your ETA</h4>
+        <p style="font-size:12.5px;color:var(--slate);margin-top:-6px;margin-bottom:14px;">If you don't check in by your ETA, your buddy is alerted. No response from them, and it auto-escalates to SOS.</p>
+        <div class="safety-row">
+          <div class="safety-btn sos pulse" onclick="showToast('SOS sent — live location shared with 3 contacts')">
+            <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2v6M12 16v6M2 12h6M16 12h6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></div>
+            <span class="lbl">Panic SOS</span>
+          </div>
+          <div class="safety-btn buddy" onclick="showToast('Safety Buddy notified of your live ETA')">
+            <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v6c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6l7-3Z" stroke="currentColor" stroke-width="1.8"/></svg></div>
+            <span class="lbl">Safety Buddy</span>
+          </div>
+          <div class="safety-btn" onclick="showToast('Incoming call started — tap to answer')">
+            <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 5c0 8 7 15 15 15l3-4-6-3-2 2c-3-1.5-4.5-3-6-6l2-2-3-6-4 3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></div>
+            <span class="lbl">Fake call</span>
+          </div>
+        </div>
+        <button class="btn btn-outline btn-block" style="margin-top:16px;" onclick="markReachedSafely()">Mark reached safely</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ DRIVE VIEW ============ -->
+<div class="view" id="view-drive">
+  <div class="page-head">
+    <div class="kicker">Drive with us</div>
+    <h2>Only verified drivers get matched</h2>
+    <p>Same badge system, in reverse — riders only ever see drivers who've cleared verification.</p>
+  </div>
+
+  <div class="gate" id="driverGate">
+    <div class="gate-card">
+      <div class="gate-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 17h16l-2-7a2 2 0 0 0-2-1.5H8A2 2 0 0 0 6 10l-2 7Z" stroke="currentColor" stroke-width="1.8"/><circle cx="8" cy="19" r="1.6" fill="currentColor"/><circle cx="17" cy="19" r="1.6" fill="currentColor"/></svg></div>
+      <h3>Verify your driver ID</h3>
+      <p>Upload your license and permit. Once cleared, Beckn-matched groups start reaching you — more revenue per trip for the same drive.</p>
+      <div class="upload-box">📎 Tap to upload license &amp; permit photo<br><span style="opacity:.65;">(simulated for this prototype)</span></div>
+      <div class="progress-wrap" id="driverProgress">
+        <div class="progress-track"><div class="progress-fill" id="driverProgressFill"></div></div>
+        <div class="progress-label" id="driverProgressLabel">Checking your permit…</div>
+      </div>
+      <button class="btn btn-primary btn-block" onclick="runVerification('driver')">Verify and go live</button>
+    </div>
+  </div>
+
+  <div class="booking-shell hidden" id="driverDashboard">
+    <div class="verified-strip">
+      <div class="who"><div class="avatar">D</div> Verified Driver</div>
+      <span class="badge badge-verified">Live near Guindy Metro</span>
+    </div>
+    <div class="card">
+      <h4>You're visible to matched groups now</h4>
+      <p style="font-size:13px;color:var(--slate);line-height:1.6;">No per-ride commission — Vazhithunai runs on a flat subscription. Detour surcharges are paid to you in full, and high-occupancy rides earn Eco-Coupons.</p>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="modalBackdrop" onclick="if(event.target===this) closeModal()">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="ic" id="modalIcon"></div>
+    <h3 id="modalTitle"></h3>
+    <p id="modalBody"></p>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="connModalBackdrop" onclick="if(event.target===this) closeConnections()">
+  <div class="modal">
+    <button class="modal-close" onclick="closeConnections()">✕</button>
+    <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M6 21c0-4 3-6 6-6s6 2 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+    <h3>38 connections</h3>
+    <p style="margin-bottom:14px;">Added one-way after a shared ride, Instagram-style. This is a social layer only — your trust score is always based on reviews, never on who you're connected to.</p>
+    <div id="connList">
+      <div class="conn-row">
+        <div class="conn-l"><div class="avatar" style="background:var(--teal-dark);">M</div><div><div class="conn-name">Murugan R.</div><div class="conn-meta">Shared 4 rides · added 2 weeks ago</div></div></div>
+        <span class="conn-badge">Driver</span>
+      </div>
+      <div class="conn-row">
+        <div class="conn-l"><div class="avatar" style="background:var(--coral);">K</div><div><div class="conn-name">Kavitha S.</div><div class="conn-meta">Shared 1 ride · added 3 days ago</div></div></div>
+        <span class="conn-badge">Driver</span>
+      </div>
+      <div class="conn-row">
+        <div class="conn-l"><div class="avatar" style="background:var(--slate);">P</div><div><div class="conn-name">Priya N.</div><div class="conn-meta">Shared 2 rides · added 1 month ago</div></div></div>
+        <span class="conn-badge">Rider</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // ---------- rotating tagline ----------
+  const taglines = [
+    { lang:'Tamil',    text:'Thunaiyaga <span class="accent">varava?</span>' },
+    { lang:'Tamil script', text:'துணையாக <span class="accent">வரவா?</span>' },
+    { lang:'English',  text:'Shall I ride <span class="accent">along with you?</span>' },
+    { lang:'Hindi',    text:'क्या मैं <span class="accent">साथ चलूं?</span>' },
+    { lang:'Telugu',   text:'నేను తోడుగా <span class="accent">వస్తానా?</span>' },
+  ];
+  let taglineIdx = 0;
+  const taglineText = document.getElementById('taglineText');
+  const taglineLang = document.getElementById('taglineLang');
+  function cycleTagline(){
+    taglineText.classList.remove('show');
+    setTimeout(() => {
+      taglineIdx = (taglineIdx + 1) % taglines.length;
+      const t = taglines[taglineIdx];
+      taglineText.innerHTML = t.text;
+      taglineText.className = 'tagline show tamil';
+      taglineLang.textContent = t.lang;
+    }, 300);
+  }
+  setInterval(cycleTagline, 3200);
+
+  // ---------- top-level view switching ----------
+  function setView(name){
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById('view-' + name).classList.add('active');
+    document.querySelectorAll('.navlinks button[data-view]').forEach(b => {
+      b.classList.toggle('active', b.dataset.view === name);
+    });
+    window.scrollTo({ top:0 });
+  }
+
+  // ---------- fullpage dot nav ----------
+  function goSection(id){
+    document.getElementById(id).scrollIntoView({ behavior:'smooth' });
+  }
+  const dots = document.querySelectorAll('#dotnav button');
+  const sections = document.querySelectorAll('.fp-section');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        dots.forEach(d => d.classList.toggle('active', d.dataset.target === entry.target.id));
+      }
+    });
+  }, { root: null, threshold: 0.35, rootMargin: '-74px 0px -40% 0px' });
+  sections.forEach(s => io.observe(s));
+
+  // ---------- feature detail data ----------
+  const features = [
+    { id:'sos', title:'One-tap Panic SOS', icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2v6M12 16v6M2 12h6M16 12h6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>',
+      body:'One tap instantly shares your live location with three trusted contacts, alongside a one-tap dial to the emergency helpline. No menus, no confirmation screens — just the alert going out.' },
+    { id:'buddy', title:'Safety Buddy check-in', icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v6c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6l7-3Z" stroke="currentColor" stroke-width="1.8"/></svg>',
+      body:'Your route is shared live with a chosen Safety Buddy. If you don\'t check in at your destination by the calculated ETA, they get an automated alert — and if they don\'t acknowledge it in time, it auto-escalates to SOS and your trusted contacts, so the loop never depends on just one person.' },
+    { id:'fakecall', title:'Fake-call decoy', icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 5c0 8 7 15 15 15l3-4-6-3-2 2c-3-1.5-4.5-3-6-6l2-2-3-6-4 3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>',
+      body:'Triggers a realistic incoming call on your screen — a natural, discreet excuse to step away from an uncomfortable pickup or ride without confrontation.' },
+    { id:'genderpref', title:'Gender preference', icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M6 21c0-4 3-6 6-6s6 2 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
+      body:'Shown only to women users: an opt-in toggle to match exclusively with other women. It\'s not offered to men, because it addresses a specific, real safety asymmetry rather than being symmetrical for its own sake. Night-ride mode applies stricter defaults automatically after a set hour.' },
+    { id:'trust', title:'Review-derived trust score', icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9.5 12.5l1.8 1.8 3.5-3.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/></svg>',
+      body:'Your score is the percentage of positive reviews across your most recent rides (e.g. last 20) — recency-weighted, so one bad ride doesn\'t sink a strong pattern and one good ride can\'t launder a bad one. Connections (added Instagram-style, only possible after a shared ride) are a separate social layer, never the safety signal itself.' },
+    { id:'chat', title:'In-app chat, no numbers shared', icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 5h16v11H8l-4 4V5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>',
+      body:'Coordinate pickup details — "running 2 minutes late, wait for me" — entirely inside the app. Your phone number is never exchanged with a match, driver or rider.' },
+  ];
+  const grid = document.getElementById('featGrid');
+  features.forEach(f => {
+    const el = document.createElement('button');
+    el.className = 'feat-card';
+    el.innerHTML = `<div class="ic">${f.icon}</div><h4>${f.title}</h4><p>Tap to see exactly what this does.</p><span class="more">Learn more →</span>`;
+    el.onclick = () => openModal(f);
+    grid.appendChild(el);
+  });
+  function openModal(f){
+    document.getElementById('modalIcon').innerHTML = f.icon;
+    document.getElementById('modalTitle').textContent = f.title;
+    document.getElementById('modalBody').textContent = f.body;
+    document.getElementById('modalBackdrop').classList.add('show');
+  }
+  function closeModal(){ document.getElementById('modalBackdrop').classList.remove('show'); }
+
+  // ---------- verification simulation ----------
+  function runVerification(who){
+    const progressWrap = document.getElementById(who + 'Progress');
+    const fill = document.getElementById(who + 'ProgressFill');
+    const label = document.getElementById(who + 'ProgressLabel');
+    progressWrap.classList.add('active');
+    label.textContent = who === 'rider' ? 'Reading your ID…' : 'Checking your permit…';
+    requestAnimationFrame(() => { fill.style.width = '38%'; });
+    setTimeout(() => { fill.style.width = '72%'; label.textContent = 'Cross-checking details…'; }, 800);
+    setTimeout(() => { fill.style.width = '100%'; label.textContent = 'Verified ✓'; }, 1700);
+    setTimeout(() => {
+      if (who === 'rider') {
+        document.getElementById('riderGate').classList.add('hidden');
+        document.getElementById('riderBooking').classList.remove('hidden');
+        loadProfile();
+      } else {
+        document.getElementById('driverGate').classList.add('hidden');
+        document.getElementById('driverDashboard').classList.remove('hidden');
+      }
+      showToast('Trust Badge issued — you\'re verified');
+    }, 2200);
+  }
+
+  function setTier(el){
+    document.querySelectorAll('.tier').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+  }
+  function voiceFill(){ showToast('Voice entry is on the roadmap — type for now'); }
+
+  // ---------- step-tab flow (Where to -> Nearby mates -> Your ride) ----------
+  function goStep(step){
+    document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('panel-' + step).classList.add('active');
+    document.querySelectorAll('.step-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('tabBtn-' + step).classList.add('active');
+    document.getElementById('riderBooking').scrollIntoView({ behavior:'smooth', block:'start' });
+  }
+  function unlockStep(step){
+    document.getElementById('tabBtn-' + step).disabled = false;
+  }
+
+  // ---------- backend integration ----------
+  // Same-origin: server.js serves this file from /public, so relative
+  // paths work. If you ever host the frontend separately from the API,
+  // set this to the full backend URL (and make sure CORS allows it —
+  // server.js already has cors() enabled).
+  const API = "";
+  let currentRide = null;
+
+  async function loadProfile(){
+    try {
+      const res = await fetch(API + "/api/me");
+      if (!res.ok) throw new Error("bad response");
+      const data = await res.json();
+      window.currentUser = data.user;
+      const rideCount = data.trustScore.rideCount ?? 0;
+      const pct = data.trustScore.positivePct ?? 100;
+      document.getElementById("riderBadgeName").textContent = `${rideCount} rides · ${pct}% positive`;
+      document.getElementById("connCountLabel").textContent = `${data.connectionCount} connections`;
+    } catch (err) {
+      console.warn("Could not load profile from backend — is `npm start` running on port 3001?", err);
+      showToast("Backend not reachable — showing demo numbers");
+    }
+  }
+
+  async function findMatches(){
+    const pickupKey = document.getElementById("pickupSelect").value;
+    const destText = document.getElementById("destInput").value.trim();
+    if (!destText) {
+      showToast("Type a destination first");
+      return;
+    }
+    try {
+      const res = await fetch(API + "/api/match", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pickupKey, mustReachInMinutes: 30 }),
+      });
+      if (!res.ok) throw new Error("match request failed");
+      const data = await res.json();
+      currentRide = data.ride;
+      renderMatch(data);
+      unlockStep("matches");
+      document.getElementById("tabBtn-where").classList.add("done");
+      goStep("matches");
+      showToast(data.created ? "No group yet — you're first, more riders will join" : "Matched with a group heading your way");
+    } catch (err) {
+      console.error(err);
+      showToast("Could not reach the matching backend — is the server running?");
+    }
+  }
+
+  function renderMatch(data){
+    const yourLeg = data.ride.riderLegs.find(l => l.riderId === window.currentUser?.id) || data.ride.riderLegs[0];
+    document.getElementById("matchDriverInitial").textContent = data.driver.name.charAt(0);
+    document.getElementById("matchDriverName").innerHTML = `${data.driver.name} <span class="badge badge-verified" style="padding:2px 8px;">Verified</span>`;
+    document.getElementById("matchFareTag").textContent = "₹" + yourLeg.fareShare;
+    document.getElementById("matchGroupTitle").textContent =
+      data.ride.metroFeederTag ? "Group forming near the metro" : "Group forming near you";
+    document.getElementById("matchDriverMeta").textContent =
+      `${data.groupSize} rider${data.groupSize > 1 ? "s" : ""} in group · dispatched via Beckn`;
+    document.getElementById("matchGroupNote").textContent = data.groupSize > 1
+      ? `${data.groupSize} riders matched so far — fare is already split by distance.`
+      : "You're the only one in this group so far — more riders heading the same way will join automatically as they request nearby.";
+    if (data.surgeExplanation) showToast(data.surgeExplanation);
+  }
+
+  async function startRide(){
+    if (!currentRide) return;
+    try {
+      await fetch(API + `/api/rides/${currentRide.id}/confirm`, { method: "POST" });
+    } catch (err) {
+      console.error(err);
+    }
+    unlockStep("ride");
+    document.getElementById("tabBtn-matches").classList.add("done");
+    goStep("ride");
+    showToast("Ride confirmed — Safety Buddy notified");
+  }
+
+  async function markReachedSafely(){
+    if (!currentRide) return;
+    try {
+      await fetch(API + `/api/rides/${currentRide.id}/complete`, { method: "POST" });
+      showToast("Reached safely — ride marked complete");
+      await loadProfile(); // trust score / connection count can change after a completed ride
+    } catch (err) {
+      showToast("Reached safely (backend not reachable to record it)");
+    }
+  }
+
+  // ---------- connections modal ----------
+  function openConnections(){ document.getElementById('connModalBackdrop').classList.add('show'); }
+  function closeConnections(){ document.getElementById('connModalBackdrop').classList.remove('show'); }
+  let toastTimer;
+  function showToast(msg){
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+  }
+</script>
+</body>
+</html>

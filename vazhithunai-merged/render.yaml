@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: vazhithunai-backend
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: 20.11.0
+      - key: FORCE_MOCK_MODE
+        value: "true"
+      - key: USE_REAL_FIREBASE
+        value: "false"
+      - key: MAP_PROVIDER
+        value: google
+      # Render sets PORT automatically; server.js already reads process.env.PORT

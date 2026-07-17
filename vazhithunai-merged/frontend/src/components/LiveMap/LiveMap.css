@@ -1,0 +1,63 @@
+.live-map {
+  background: #0f172a;
+  border-radius: 16px;
+  padding: 12px;
+  color: #e2e8f0;
+  font-family: system-ui, sans-serif;
+}
+
+.live-map--empty {
+  padding: 40px;
+  text-align: center;
+  color: #94a3b8;
+}
+
+.live-map__svg {
+  width: 100%;
+  height: auto;
+  background: #111827;
+  border-radius: 12px;
+}
+
+.live-map__route {
+  fill: none;
+  stroke: #38bdf8;
+  stroke-width: 3;
+  stroke-dasharray: 6 4;
+}
+
+.live-map__pin--origin { fill: #22c55e; }
+.live-map__pin--dest { fill: #ef4444; }
+
+.live-map__driver {
+  fill: #facc15;
+  stroke: #111827;
+  stroke-width: 2;
+}
+
+.live-map__driver--alert {
+  fill: #f97316;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.4; }
+  100% { opacity: 1; }
+}
+
+.live-map__meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+  font-size: 13px;
+}
+
+.live-map__deviation-badge {
+  background: #f97316;
+  color: #111827;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-weight: 600;
+}
